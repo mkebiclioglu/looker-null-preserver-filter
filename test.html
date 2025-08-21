@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Null Preserver Filter - Test Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="max-width: 800px; margin: 50px auto; padding: 20px;">
+        <h1>🧪 Null Preserver Filter - Test Page</h1>
+        <p>This page simulates the Looker Studio environment for testing the visualization locally.</p>
+        
+        <div style="margin: 20px 0; padding: 15px; background: #f0f8ff; border-radius: 8px;">
+            <h3>Test Data</h3>
+            <p>The visualization below is bound to test data that includes the <code>"__NULL__"</code> sentinel string.</p>
+        </div>
+
+        <div id="viz-container" style="border: 2px solid #ddd; border-radius: 8px; min-height: 300px;"></div>
+        
+        <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 8px;">
+            <h3>Filter Output</h3>
+            <p>Selected values: <span id="filter-output">None</span></p>
+            <p><small>Note: <code>"__NULL__"</code> is always included but not shown in the UI</small></p>
+        </div>
+    </div>
+
+    <script>
+        // Mock Looker Studio environment
+        window.gds = {
+            interactive: {
+                emit: function(event, data) {
+                    if (event === 'filter') {
+                        const output = document.getElementById('filter-output');
+                        output.textContent = data.values.join(', ');
+                        console.log('Filter emitted:', data);
+                    }
+                }
+            }
+        };
+
+        // Test data with null sentinel
+        const testData = {
+            tables: {
+                DEFAULT: [
+                    { dimID: 'Category A' },
+                    { dimID: 'Category B' },
+                    { dimID: 'Category C' },
+                    { dimID: '__NULL__' },
+                    { dimID: 'Category D' },
+                    { dimID: '__NULL__' },
+                    { dimID: 'Category E' }
+                ]
+            }
+        };
+
+        const testConfig = {
+            showSearch: true,
+            selectAll: true
+        };
+
+        // Load and test the visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate the drawViz function call
+            if (typeof drawViz === 'function') {
+                drawViz(testData, testConfig);
+            } else {
+                console.error('drawViz function not found');
+            }
+        });
+    </script>
+    <script src="nullPreserver.js"></script>
+</body>
+</html>

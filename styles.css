@@ -1,0 +1,160 @@
+/* Null Preserver Filter - Looker Studio Community Visualization Styles */
+
+.npf-wrapper {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Search Container */
+.npf-search-container {
+  margin-bottom: 16px;
+}
+
+.npf-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.npf-search-input:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.npf-search-input::placeholder {
+  color: #999;
+}
+
+/* Select All Container */
+.npf-select-all-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Checkbox Container */
+.npf-checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.npf-checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+}
+
+.npf-checkbox-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Checkboxes */
+.npf-checkbox {
+  margin: 0 8px 0 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #4285f4;
+  cursor: pointer;
+}
+
+.npf-checkbox:focus {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+}
+
+/* Labels */
+.npf-label {
+  cursor: pointer;
+  user-select: none;
+  flex: 1;
+  padding: 2px 0;
+}
+
+.npf-label:hover {
+  color: #4285f4;
+}
+
+/* Empty State */
+.npf-empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Error State */
+.npf-error {
+  text-align: center;
+  padding: 32px 16px;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .npf-wrapper {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .npf-search-input {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  .npf-checkbox-item {
+    padding: 4px 0;
+  }
+}
+
+/* Accessibility Improvements */
+.npf-checkbox:focus-visible {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+}
+
+.npf-label:focus-visible {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .npf-wrapper {
+    border: 2px solid #000;
+  }
+  
+  .npf-search-input {
+    border: 2px solid #000;
+  }
+  
+  .npf-checkbox-item:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .npf-search-input,
+  .npf-checkbox-item {
+    transition: none;
+  }
+}

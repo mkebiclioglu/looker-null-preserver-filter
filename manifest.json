@@ -1,0 +1,38 @@
+{
+  "name": "Null Preserver Filter",
+  "id": "null_preserver_filter",
+  "description": "Multi-select filter that always includes nulls (hidden)",
+  "version": "1.0.0",
+  "author": "mkebiclioglu",
+  "main": "nullPreserver.js",
+  "style": "styles.css",
+  "icon": "icon.png",
+  "logo": "logo.png",
+  "features": ["FILTER"],
+  "data": [
+    {
+      "id": "table",
+      "label": "Data Table",
+      "elements": [
+        {
+          "id": "dimID",
+          "label": "Dimension",
+          "type": "DIMENSION",
+          "dataType": "STRING"
+        }
+      ]
+    }
+  ],
+  "config": {
+    "showSearch": {
+      "type": "BOOLEAN",
+      "label": "Show Search Box",
+      "defaultValue": true
+    },
+    "selectAll": {
+      "type": "BOOLEAN",
+      "label": "Show Select All Option",
+      "defaultValue": true
+    }
+  }
+}

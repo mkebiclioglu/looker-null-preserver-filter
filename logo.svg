@@ -1,0 +1,6 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" fill="#4285f4" rx="16"/>
+  <circle cx="64" cy="64" r="48" fill="white" opacity="0.1"/>
+  <path d="M32 32h64v16H32V32zm0 24h64v16H32V56zm0 24h64v16H32V80z" fill="white"/>
+  <text x="64" y="110" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12" font-weight="bold">NULL PRESERVER</text>
+</svg>
