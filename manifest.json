@@ -2,7 +2,7 @@
   "name": "Null Preserver Filter",
   "organization": "mkebiclioglu",
   "description": "Multi-select filter that always includes nulls (hidden) - A powerful filtering component that preserves null values in your data while keeping them hidden from the user interface.",
-  "logoUrl": "https://storage.googleapis.com/better-looker-filter/logo.svg",
+  "logoUrl": "https://storage.googleapis.com/better-looker-filter-v10/logo.svg",
   "packageUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter",
   "organizationUrl": "https://github.com/mkebiclioglu",
   "supportUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter/issues",
@@ -14,12 +14,12 @@
       "id": "nullPreserverFilter",
       "name": "Null Preserver Filter",
       "description": "Multi-select filter that always includes nulls (hidden) - Automatically preserves null values in filtering while hiding them from the UI for a cleaner user experience.",
-      "iconUrl": "https://storage.googleapis.com/better-looker-filter/icon.svg",
+      "iconUrl": "https://storage.googleapis.com/better-looker-filter-v10/icon.svg",
       "infoUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter",
-      "resource": {
-        "js": "gs://better-looker-filter/nullPreserver-bundled.js",
-        "config": "gs://better-looker-filter/viz-config.json",
-        "css": "gs://better-looker-filter/styles.css"
+              "resource": {
+        "js": ["gs://better-looker-filter-v10/nullPreserver-bundled.js"],
+        "config": ["gs://better-looker-filter-v10/viz-config.json"],
+        "css": ["gs://better-looker-filter-v10/styles.css"]
       }
     }
   ]
