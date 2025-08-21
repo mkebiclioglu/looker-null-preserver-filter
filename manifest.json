@@ -6,9 +6,20 @@
   "author": "mkebiclioglu",
   "main": "nullPreserver.js",
   "style": "styles.css",
-  "icon": "icon.png",
-  "logo": "logo.png",
+  "icon": "icon.svg",
+  "logo": "logo.svg",
   "features": ["FILTER"],
+  "components": [
+    {
+      "id": "nullPreserverFilter",
+      "name": "Null Preserver Filter",
+      "resource": {
+        "js": "gs://BUCKET_NAME/nullPreserver.js",
+        "css": "gs://BUCKET_NAME/styles.css",
+        "config": "gs://BUCKET_NAME/viz-config.json"
+      }
+    }
+  ],
   "data": [
     {
       "id": "table",

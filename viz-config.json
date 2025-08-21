@@ -1,0 +1,12 @@
+{
+  "showSearch": {
+    "type": "BOOLEAN",
+    "label": "Show Search Box",
+    "defaultValue": true
+  },
+  "selectAll": {
+    "type": "BOOLEAN",
+    "label": "Show Select All Option",
+    "defaultValue": true
+  }
+}
