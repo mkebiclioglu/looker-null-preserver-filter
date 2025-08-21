@@ -1,12 +1,36 @@
 {
-  "showSearch": {
-    "type": "BOOLEAN",
-    "label": "Show Search Box",
-    "defaultValue": true
-  },
-  "selectAll": {
-    "type": "BOOLEAN",
-    "label": "Show Select All Option",
-    "defaultValue": true
+  "data": [{
+    "id": "table",
+    "label": "Data Table",
+    "elements": [{
+      "type": "DIMENSION",
+      "id": "dimID",
+      "label": "Dimension",
+      "options": {
+        "dataType": "STRING"
+      }
+    }]
+  }],
+  "style": [{
+    "id": "appearance",
+    "label": "Appearance",
+    "elements": [{
+      "type": "BOOLEAN",
+      "id": "showSearch",
+      "label": "Show Search Box",
+      "defaultValue": true
+    }, {
+      "type": "BOOLEAN",
+      "id": "selectAll",
+      "label": "Show Select All Option",
+      "defaultValue": true
+    }]
+  }],
+  "interactions": [{
+    "id": "filter",
+    "supportedActions": ["FILTER"]
+  }],
+  "features": {
+    "enableComparisonDateRange": false
   }
 }

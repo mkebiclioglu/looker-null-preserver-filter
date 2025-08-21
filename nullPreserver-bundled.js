@@ -3,13 +3,19 @@
  * Always includes null values in filtering while hiding them from the UI
  */
 
-// Global variables
-let gVizData = null;
-let gConfig = null;
-let gContainer = null;
-let gFilterState = new Set();
-let gAllValues = new Set();
-let gFilteredValues = new Set();
+// Main visualization function (required by Looker Studio)
+function drawViz(data, config, container) {
+  try {
+    console.log('[NullPreserverFilter] Initializing with data:', data);
+    
+    // Initialize the visualization
+    const viz = new NullPreserverFilter(container, data, config);
+    
+  } catch (error) {
+    console.error('[NullPreserverFilter] Error initializing visualization:', error);
+    container.innerHTML = '<div class="npf-error">Error loading visualization</div>';
+  }
+}
 
 /**
  * Main visualization class
@@ -19,6 +25,7 @@ class NullPreserverFilter {
     this.container = container;
     this.data = data;
     this.config = config;
+    this.filterState = new Set();
     this.init();
   }
 
@@ -67,7 +74,12 @@ class NullPreserverFilter {
     const values = new Set();
     
     for (const row of table) {
-      const value = row.dimID;
+      // Handle both row.dimID and row.dimID[0] (some transforms send arrays)
+      let value = row.dimID;
+      if (Array.isArray(value)) {
+        value = value[0];
+      }
+      
       if (value && value !== '__NULL__') {
         values.add(value);
       }
@@ -121,24 +133,23 @@ class NullPreserverFilter {
     const checkboxContainer = document.createElement('div');
     checkboxContainer.className = 'npf-checkbox-container';
 
-    values.forEach((value, index) => {
+    values.forEach(value => {
       const checkboxItem = document.createElement('div');
       checkboxItem.className = 'npf-checkbox-item';
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.id = `npf-checkbox-${index}`;
+      checkbox.id = `npf-${value}`;
       checkbox.className = 'npf-checkbox';
-      checkbox.value = value;
       checkbox.checked = this.filterState.has(value);
 
       const label = document.createElement('label');
-      label.htmlFor = `npf-checkbox-${index}`;
+      label.htmlFor = `npf-${value}`;
       label.textContent = value;
       label.className = 'npf-label';
 
       checkbox.addEventListener('change', (e) => {
-        this.handleCheckboxChange(e.target.value, e.target.checked);
+        this.handleCheckboxChange(value, e.target.checked);
       });
 
       checkboxItem.appendChild(checkbox);
@@ -149,40 +160,20 @@ class NullPreserverFilter {
     return checkboxContainer;
   }
 
-  renderEmptyState() {
-    const emptyMessage = document.createElement('div');
-    emptyMessage.className = 'npf-empty-state';
-    emptyMessage.textContent = 'No data available';
-    this.container.appendChild(emptyMessage);
-  }
-
   filterValues(searchTerm) {
-    const values = this.getUniqueValues();
-    const filtered = values.filter(value => 
-      value.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    // Update checkbox visibility
+    const searchLower = searchTerm.toLowerCase();
     const checkboxes = this.container.querySelectorAll('.npf-checkbox-item');
-    checkboxes.forEach((item, index) => {
-      const value = values[index];
-      if (value) {
-        const isVisible = filtered.includes(value);
-        item.style.display = isVisible ? 'block' : 'none';
+    
+    checkboxes.forEach(item => {
+      const label = item.querySelector('.npf-label');
+      const text = label.textContent.toLowerCase();
+      
+      if (text.includes(searchLower)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
       }
     });
-
-    // Update select all state
-    this.updateSelectAllState(filtered);
-  }
-
-  updateSelectAllState(visibleValues) {
-    const selectAllCheckbox = this.container.querySelector('#npf-select-all');
-    if (selectAllCheckbox) {
-      const checkedVisible = visibleValues.filter(value => this.filterState.has(value));
-      selectAllCheckbox.checked = checkedVisible.length === visibleValues.length && visibleValues.length > 0;
-      selectAllCheckbox.indeterminate = checkedVisible.length > 0 && checkedVisible.length < visibleValues.length;
-    }
   }
 
   handleSelectAll(checked, values) {
@@ -191,11 +182,9 @@ class NullPreserverFilter {
         this.filterState.add(value);
       });
     } else {
-      values.forEach(value => {
-        this.filterState.delete(value);
-      });
+      this.filterState.clear();
     }
-
+    
     this.updateCheckboxes();
     this.emitFilter();
   }
@@ -206,8 +195,8 @@ class NullPreserverFilter {
     } else {
       this.filterState.delete(value);
     }
-
-    this.updateSelectAllState(this.getUniqueValues());
+    
+    this.updateSelectAllState();
     this.emitFilter();
   }
 
@@ -215,65 +204,63 @@ class NullPreserverFilter {
     const checkboxes = this.container.querySelectorAll('.npf-checkbox');
     checkboxes.forEach(checkbox => {
       if (checkbox.id !== 'npf-select-all') {
-        checkbox.checked = this.filterState.has(checkbox.value);
+        const value = checkbox.id.replace('npf-', '');
+        checkbox.checked = this.filterState.has(value);
       }
     });
   }
 
-  emitFilter() {
-    // Always include null sentinel in the filter
-    const filterValues = Array.from(this.filterState);
-    filterValues.push('__NULL__');
+  updateSelectAllState() {
+    const selectAllCheckbox = this.container.querySelector('#npf-select-all');
+    if (selectAllCheckbox) {
+      const values = this.getUniqueValues();
+      const allSelected = values.every(value => this.filterState.has(value));
+      selectAllCheckbox.checked = allSelected;
+      selectAllCheckbox.indeterminate = this.filterState.size > 0 && !allSelected;
+    }
+  }
 
-    // Emit filter interaction
-    if (window.gds && window.gds.interactive) {
-      window.gds.interactive.emit('filter', {
-        table: 'table',
+  renderEmptyState() {
+    const emptyMessage = document.createElement('div');
+    emptyMessage.className = 'npf-empty-state';
+    emptyMessage.textContent = 'No data available for filtering';
+    this.container.appendChild(emptyMessage);
+  }
+
+  emitInitialFilter() {
+    // Always include null values in the filter, even with empty dataset
+    this.emitFilter();
+  }
+
+  emitFilter() {
+    // Create filter with chosen values + always include __NULL__
+    const filterValues = Array.from(this.filterState);
+    
+    // Always inject __NULL__ sentinel
+    if (!filterValues.includes('__NULL__')) {
+      filterValues.push('__NULL__');
+    }
+
+    // Use current interactions API
+    if (typeof dscc !== 'undefined' && dscc.sendInteraction) {
+      // Modern API
+      dscc.sendInteraction('FILTER', {
+        table: 'DEFAULT',
+        column: 'dimID',
+        values: filterValues
+      });
+    } else {
+      // Fallback for legacy support
+      console.log('[NullPreserverFilter] Filter applied (legacy):', {
+        table: 'DEFAULT',
         column: 'dimID',
         values: filterValues
       });
     }
   }
-
-  emitInitialFilter() {
-    const values = this.getUniqueValues();
-    // Initially select all visible values
-    values.forEach(value => {
-      this.filterState.add(value);
-    });
-    this.emitFilter();
-  }
 }
 
-// Global state
-let vizInstance = null;
-
-/**
- * Main entry point for the visualization
- */
-function drawViz(data, config) {
-  try {
-    gVizData = data;
-    gConfig = config;
-    gContainer = document.getElementById('viz-container');
-
-    if (!gContainer) {
-      console.error('Container element not found');
-      return;
-    }
-
-    // Initialize visualization
-    vizInstance = new NullPreserverFilter(gContainer, data, config);
-
-  } catch (error) {
-    console.error('Error initializing visualization:', error);
-    if (gContainer) {
-      gContainer.innerHTML = '<div class="npf-error">Error loading visualization</div>';
-    }
-  }
-}
-
-// Export for Looker Studio
+// Export for external use
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { drawViz };
+  module.exports = { drawViz, NullPreserverFilter };
 }

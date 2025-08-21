@@ -1,49 +1,27 @@
 {
   "name": "Null Preserver Filter",
-  "id": "null_preserver_filter",
-  "description": "Multi-select filter that always includes nulls (hidden)",
-  "version": "1.0.0",
-  "author": "mkebiclioglu",
-  "main": "nullPreserver.js",
-  "style": "styles.css",
-  "icon": "icon.svg",
-  "logo": "logo.svg",
-  "features": ["FILTER"],
+  "organization": "mkebiclioglu",
+  "description": "Multi-select filter that always includes nulls (hidden) - A powerful filtering component that preserves null values in your data while keeping them hidden from the user interface.",
+  "logoUrl": "https://storage.googleapis.com/better-looker-filter/logo.svg",
+  "packageUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter",
+  "organizationUrl": "https://github.com/mkebiclioglu",
+  "supportUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter/issues",
+  "privacyPolicyUrl": "",
+  "termsOfServiceUrl": "",
+  "devMode": false,
   "components": [
     {
       "id": "nullPreserverFilter",
       "name": "Null Preserver Filter",
+      "description": "Multi-select filter that always includes nulls (hidden) - Automatically preserves null values in filtering while hiding them from the UI for a cleaner user experience.",
+      "iconUrl": "https://storage.googleapis.com/better-looker-filter/icon.svg",
+      "infoUrl": "https://github.com/mkebiclioglu/looker-null-preserver-filter",
       "resource": {
-        "js": "gs://BUCKET_NAME/nullPreserver.js",
-        "css": "gs://BUCKET_NAME/styles.css",
-        "config": "gs://BUCKET_NAME/viz-config.json"
+        "js": "gs://better-looker-filter/nullPreserver-bundled.js",
+        "config": "gs://better-looker-filter/viz-config.json",
+        "css": "gs://better-looker-filter/styles.css"
       }
     }
-  ],
-  "data": [
-    {
-      "id": "table",
-      "label": "Data Table",
-      "elements": [
-        {
-          "id": "dimID",
-          "label": "Dimension",
-          "type": "DIMENSION",
-          "dataType": "STRING"
-        }
-      ]
-    }
-  ],
-  "config": {
-    "showSearch": {
-      "type": "BOOLEAN",
-      "label": "Show Search Box",
-      "defaultValue": true
-    },
-    "selectAll": {
-      "type": "BOOLEAN",
-      "label": "Show Select All Option",
-      "defaultValue": true
-    }
-  }
+  ]
 }
+
