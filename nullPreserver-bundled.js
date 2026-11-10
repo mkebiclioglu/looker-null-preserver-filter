@@ -72,7 +72,12 @@ function draw(data) {
     console.error('[NullPreserverFilter] Error in draw function:', error);
     let container = document.getElementById('npf-container');
     if (container) {
-      container.innerHTML = '<div class="npf-error">Error loading visualization: ' + error.message + '</div>';
+      // Build the node with textContent: error messages can echo report data
+      const errorEl = document.createElement('div');
+      errorEl.className = 'npf-error';
+      errorEl.textContent = 'Error loading visualization: ' + (error && error.message);
+      container.innerHTML = '';
+      container.appendChild(errorEl);
     }
   }
 }
